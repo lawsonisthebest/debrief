@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Debrief — Wireframes</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    background: #e5e5e5;
+    color: #111;
+    font-size: 13px;
+    line-height: 1.4;
+  }
+  .toolbar {
+    position: sticky; top: 0; z-index: 50;
+    background: #fff; border-bottom: 1px solid #111;
+    display: flex; gap: 6px; flex-wrap: wrap; padding: 10px 12px; align-items: center;
+  }
+  .toolbar strong { margin-right: 8px; font-size: 12px; }
+  .toolbar button {
+    background: #fff; border: 1px solid #111; padding: 6px 10px; cursor: pointer; font-size: 12px;
+  }
+  .toolbar button.active { background: #111; color: #fff; }
+  .stage {
+    padding: 24px;
+    display: flex; justify-content: center;
+  }
+  .frame {
+    width: 1440px; height: 900px;
+    background: #fff; border: 2px solid #111;
+    overflow: hidden; position: relative;
+    display: none;
+  }
+  .frame.active { display: block; }
+  /* Public pages */
+  .topnav {
+    height: 56px; border-bottom: 1px solid #111;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 28px;
+  }
+  .brand { font-weight: 700; font-size: 16px; letter-spacing: -0.02em; }
+  .navlinks { display: flex; gap: 20px; color: #333; }
+  .btn {
+    border: 1px solid #111; background: #fff; padding: 8px 14px; font-size: 12px; cursor: default;
+  }
+  .btn.solid { background: #111; color: #fff; }
+  .btn.sm { padding: 5px 10px; font-size: 11px; }
+  /* App shell */
+  .app { display: flex; height: 100%; }
+  .sidebar {
+    width: 220px; border-right: 1px solid #111;
+    display: flex; flex-direction: column; padding: 18px 14px; gap: 4px;
+  }
+  .sidebar .brand { margin-bottom: 18px; padding: 0 6px; }
+  .side-item {
+    padding: 9px 10px; border: 1px solid transparent; border-radius: 2px;
+  }
+  .side-item.active { border-color: #111; background: #f3f3f3; font-weight: 600; }
+  .side-foot { margin-top: auto; border-top: 1px solid #111; padding-top: 12px; }
+  .avatar {
+    width: 28px; height: 28px; border: 1px solid #111; display: inline-flex;
+    align-items: center; justify-content: center; font-size: 11px; margin-right: 8px;
+  }
+  .main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+  .page-head {
+    padding: 22px 28px 14px; border-bottom: 1px solid #ddd;
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;
+  }
+  .page-head h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
+  .page-head p { color: #555; margin-top: 4px; font-size: 12px; }
+  .content { padding: 20px 28px; overflow: auto; flex: 1; }
+  .row { display: flex; gap: 14px; }
+  .col { flex: 1; min-width: 0; }
+  .card {
+    border: 1px solid #111; background: #fff; padding: 14px;
+  }
+  .label { font-size: 11px; color: #555; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px; }
+  .metric { font-size: 26px; font-weight: 700; letter-spacing: -0.03em; }
+  .muted { color: #666; font-size: 12px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .grid-2 { display: grid; grid-template-columns: 1.4fr 1fr; gap: 12px; }
+  .ph {
+    border: 1px dashed #999; background: #fafafa; height: 160px;
+    display: flex; align-items: center; justify-content: center; color: #666; font-size: 12px;
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid #ddd; }
+  th { font-size: 11px; color: #555; font-weight: 600; border-bottom: 1px solid #111; }
+  .pill {
+    display: inline-block; border: 1px solid #111; padding: 2px 8px; font-size: 11px; margin-right: 4px;
+  }
+  .pill.on { background: #111; color: #fff; }
+  .field { margin-bottom: 14px; }
+  .field label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 6px; }
+  .input, .textarea {
+    width: 100%; border: 1px solid #111; background: #fff; padding: 9px 10px; font-size: 12px;
+  }
+  .textarea { min-height: 110px; resize: none; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 18px; }
+  .hero {
+    display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 28px;
+    padding: 48px 28px 28px; align-items: start;
+  }
+  .hero h1 { font-size: 40px; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 12px; }
+  .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 0 28px 28px; }
+  .auth-wrap { height: calc(100% - 56px); display: flex; align-items: center; justify-content: center; }
+  .auth-card { width: 380px; border: 1px solid #111; padding: 28px; }
+  .auth-card h1 { font-size: 20px; margin: 12px 0 18px; }
+  .empty {
+    border: 1px dashed #111; padding: 36px; text-align: center; margin-top: 16px;
+  }
+  .empty h2 { font-size: 18px; margin: 10px 0 6px; }
+  .meta { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 10px; }
+  .section { margin-bottom: 14px; }
+  .section h3 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; color: #555; margin-bottom: 8px; }
+  .note { border: 1px solid #ddd; padding: 12px; background: #fafafa; }
+  .wf-tag {
+    position: absolute; top: 8px; right: 10px; font-size: 10px; color: #666;
+    border: 1px solid #bbb; padding: 2px 6px; background: #fff;
+  }
+</style>
+</head>
+<body>
+  <div class="toolbar">
+    <strong>Debrief wireframes (B/W)</strong>
+    <button type="button" class="active" data-page="landing">01 Landing</button>
+    <button type="button" data-page="signin">02 Sign in</button>
+    <button type="button" data-page="dashboard">03 Dashboard</button>
+    <button type="button" data-page="new">04 New session</button>
+    <button type="button" data-page="sessions">05 Sessions</button>
+    <button type="button" data-page="detail">06 Session detail</button>
+    <button type="button" data-page="empty">07 Empty dashboard</button>
+  </div>
+  <div class="stage">
+
+    <!-- LANDING -->
+    <div class="frame active" id="landing">
+      <div class="wf-tag">WIREFRAME · 1440×900</div>
+      <div class="topnav">
+        <div class="brand">Debrief</div>
+        <div class="navlinks"><span>Features</span><span>Pricing</span><span>FAQ</span></div>
+        <button class="btn solid sm">Sign in</button>
+      </div>
+      <div class="hero">
+        <div>
+          <h1>Log the work.<br>Keep the feeling.</h1>
+          <p class="muted" style="max-width:420px;margin-bottom:18px;">Track sessions with duration, category, mood, and notes. See hours, streaks, and patterns over time.</p>
+          <div style="display:flex;gap:8px;">
+            <button class="btn solid">Sign in</button>
+            <button class="btn">Learn more</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="label">Preview · this week</div>
+          <div class="row" style="margin-top:10px;">
+            <div class="col"><div class="muted">Hours</div><div class="metric" style="font-size:22px;">23.5</div></div>
+            <div class="col"><div class="muted">Streak</div><div class="metric" style="font-size:22px;">7</div></div>
+            <div class="col"><div class="muted">Avg mood</div><div class="metric" style="font-size:22px;">4.2</div></div>
+          </div>
+          <div class="ph" style="height:120px;margin-top:14px;">[ weekly hours chart ]</div>
+        </div>
+      </div>
+      <div class="features">
+        <div class="card"><strong>Log sessions</strong><p class="muted" style="margin-top:6px;">Title, category, duration, mood 1–5, freeform notes.</p></div>
+        <div class="card"><strong>See patterns</strong><p class="muted" style="margin-top:6px;">Hours by category, streaks, recent history.</p></div>
+        <div class="card"><strong>Stay consistent</strong><p class="muted" style="margin-top:6px;">Streak tracking for days you actually logged work.</p></div>
+      </div>
+    </div>
+
+    <!-- SIGN IN -->
+    <div class="frame" id="signin">
+      <div class="wf-tag">WIREFRAME · 1440×900</div>
+      <div class="topnav">
+        <div class="brand">Debrief</div>
+        <span class="muted">Auth</span>
+      </div>
+      <div class="auth-wrap">
+        <div class="auth-card">
+          <div class="brand">Debrief</div>
+          <h1>Sign in to Debrief</h1>
+          <div class="field"><label>Email</label><div class="input">you@email.com</div></div>
+          <div class="field"><label>Password</label><div class="input">••••••••</div></div>
+          <button class="btn solid" style="width:100%;margin-bottom:8px;">Sign in</button>
+          <button class="btn" style="width:100%;">Continue with Google</button>
+          <p class="muted" style="margin-top:14px;text-align:center;">Need an account? Sign up</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="frame" id="dashboard">
+      <div class="wf-tag">WIREFRAME · 1440×900</div>
+      <div class="app">
+        <aside class="sidebar">
+          <div class="brand">Debrief</div>
+          <div class="side-item active">Dashboard</div>
+          <div class="side-item">Sessions</div>
+          <div class="side-item">New session</div>
+          <div class="side-item">Insights</div>
+          <div class="side-item">Settings</div>
+          <div class="side-foot"><span class="avatar">L</span>Lawson</div>
+        </aside>
+        <div class="main">
+          <div class="page-head">
+            <div>
+              <h1>Dashboard</h1>
+              <p>Your sessions this week · May 12 – May 18</p>
+            </div>
+            <button class="btn solid sm">+ New session</button>
+          </div>
+          <div class="content">
+            <div class="grid-4" style="margin-bottom:14px;">
+              <div class="card"><div class="label">Total hours</div><div class="metric">42.5</div><div class="muted">vs 34.2 last week</div></div>
+              <div class="card"><div class="label">Streak</div><div class="metric">7 days</div><div class="muted">Best: 14 days</div></div>
+              <div class="card"><div class="label">Avg mood</div><div class="metric">4.1 / 5</div><div class="muted">Across 28 sessions</div></div>
+              <div class="card"><div class="label">Sessions</div><div class="metric">28</div><div class="muted">vs 22 last week</div></div>
+            </div>
+            <div class="grid-2" style="margin-bottom:14px;">
+              <div class="card">
+                <div class="label">Weekly hours</div>
+                <div class="ph">[ Mon–Sun bar chart ]</div>
+              </div>
+              <div class="card">
+                <div class="label">Category breakdown</div>
+                <div style="margin-top:8px;">
+                  <div style="display:flex;justify-content:space-between;margin-bottom:8px;"><span>Coding</span><span>18.7h · 44%</span></div>
+                  <div style="height:8px;border:1px solid #111;margin-bottom:12px;"><div style="width:44%;height:100%;background:#111;"></div></div>
+                  <div style="display:flex;justify-content:space-between;margin-bottom:8px;"><span>Cyber lab</span><span>12.3h · 29%</span></div>
+                  <div style="height:8px;border:1px solid #111;margin-bottom:12px;"><div style="width:29%;height:100%;background:#111;"></div></div>
+                  <div style="display:flex;justify-content:space-between;margin-bottom:8px;"><span>School</span><span>11.5h · 27%</span></div>
+                  <div style="height:8px;border:1px solid #111;"><div style="width:27%;height:100%;background:#111;"></div></div>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+                <div class="label" style="margin:0;">Recent sessions</div>
+                <span class="muted">View all →</span>
+              </div>
+              <table>
+                <thead><tr><th>Title</th><th>Category</th><th>Duration</th><th>Mood</th><th>Date</th></tr></thead>
+                <tbody>
+                  <tr><td>Refactored auth middleware</td><td><span class="pill">Coding</span></td><td>1h 35m</td><td>4</td><td>May 18</td></tr>
+                  <tr><td>Wireshark HTTP lab</td><td><span class="pill">Cyber lab</span></td><td>2h 05m</td><td>5</td><td>May 17</td></tr>
+                  <tr><td>Calc II — integration</td><td><span class="pill">School</span></td><td>1h 10m</td><td>3</td><td>May 16</td></tr>
+                  <tr><td>OAuth review notes</td><td><span class="pill">Coding</span></td><td>55m</td><td>4</td><td>May 15</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NEW SESSION -->
+    <div class="frame" id="new">
+      <div class="wf-tag">WIREFRAME · 1440×900</div>
+      <div class="app">
+        <aside class="sidebar">
+          <div class="brand">Debrief</div>
+          <div class="side-item">Dashboard</div>
+          <div class="side-item">Sessions</div>
+          <div class="side-item active">New session</div>
+          <div class="side-item">Insights</div>
+          <div class="side-item">Settings</div>
+          <div class="side-foot"><span class="avatar">L</span>Lawson</div>
+        </aside>
+        <div class="main">
+          <div class="page-head">
+            <div>
+              <h1>New session</h1>
+              <p>Log what you did and how it felt</p>
+            </div>
+          </div>
+          <div class="content">
+            <div class="grid-2">
+              <div class="card">
+                <div class="field"><label>Session title *</label><div class="input">Refactored auth middleware</div></div>
+                <div class="field"><label>Category *</label>
+                  <div class="chips">
+                    <span class="pill on">Coding</span>
+                    <span class="pill">Cyber lab</span>
+                    <span class="pill">School</span>
+                    <span class="pill">Other</span>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="field col"><label>Started</label><div class="input">2025-05-20 14:30</div></div>
+                  <div class="field col"><label>Ended</label><div class="input">2025-05-20 16:05</div></div>
+                </div>
+                <div class="field"><label>Duration (minutes)</label><div class="input">95</div></div>
+                <div class="field"><label>Project / tag</label><div class="input">debrief-api</div></div>
+              </div>
+              <div class="card">
+                <div class="field"><label>Mood (1–5) *</label>
+                  <div class="chips" style="margin-bottom:6px;">
+                    <span class="pill">1</span><span class="pill">2</span><span class="pill">3</span><span class="pill on">4</span><span class="pill">5</span>
+                  </div>
+                  <div class="muted">Terrible · Bad · Okay · Good · Great</div>
+                </div>
+                <div class="field"><label>Reason (optional)</label>
+                  <div class="chips">
+                    <span class="pill on">Focused</span>
+                    <span class="pill">Stuck</span>
+                    <span class="pill on">Flow</span>
+                    <span class="pill">Tired</span>
+                  </div>
+                </div>
+                <div class="field"><label>Notes</label>
+                  <div class="textarea">Separated JWT validation from permission checks. Tests passing. Felt clean once the structure clicked.</div>
+                </div>
+                <div class="field"><label>Focus quality</label><div class="input">High ▾</div></div>
+                <div class="muted">☑ Count toward streak</div>
+              </div>
+            </div>
+            <div class="actions">
+              <button class="btn">Cancel</button>
+              <button class="btn solid">Save session</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SESSIONS -->
+    <div class="frame" id="sessions">
+      <div class="wf-tag">WIREFRAME · 1440×900</div>
+      <div class="app">
+        <aside class="sidebar">
+          <div class="brand">Debrief</div>
+          <div class="side-item">Dashboard</div>
+          <div class="side-item active">Sessions</div>
+          <div class="side-item">New session</div>
+          <div class="side-item">Insights</div>
+          <div class="side-item">Settings</div>
+          <div class="side-foot"><span class="avatar">L</span>Lawson</div>
+        </aside>
+        <div class="main">
+          <div class="page-head">
+            <div>
+              <h1>Sessions</h1>
+              <p>Review and filter logged work</p>
+            </div>
+            <button class="btn solid sm">+ New session</button>
+          </div>
+          <div class="content">
+            <div class="row" style="margin-bottom:14px;">
+              <div class="input" style="flex:1.4;">Search sessions…</div>
+              <div class="input" style="flex:0.7;">Category ▾</div>
+              <div class="input" style="flex:0.7;">Mood ▾</div>
+              <div class="input" style="flex:0.9;">Date range ▾</div>
+            </div>
+            <div class="card" style="padding:0;">
+              <table>
+                <thead><tr><th>Title</th><th>Category</th><th>Duration</th><th>Mood</th><th>Date</th><th></th></tr></thead>
+                <tbody>
+                  <tr><td>React auth flow debugging<br><span class="muted">Token refresh bug, auth service</span></td><td><span class="pill">Coding</span></td><td>1h 24m</td><td>4</td><td>May 24</td><td>···</td></tr>
+                  <tr><td>Wireshark HTTP/2 lab<br><span class="muted">OTECH packet analysis</span></td><td><span class="pill">Cyber lab</span></td><td>2h 05m</td><td>5</td><td>May 22</td><td>···</td></tr>
+                  <tr><td>Calc II — integration by parts<br><span class="muted">Homework set 6</span></td><td><span class="pill">School</span></td><td>1h 10m</td><td>3</td><td>May 20</td><td>···</td></tr>
+                  <tr><td>OAuth 2.0 implementation review<br><span class="muted">Notes + diagram</span></td><td><span class="pill">Coding</span></td><td>1h 38m</td><td>4</td><td>May 18</td><td>···</td></tr>
+                  <tr><td>Network security lecture<br><span class="muted">ACLs / firewalls</span></td><td><span class="pill">School</span></td><td>55m</td><td>3</td><td>May 16</td><td>···</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DETAIL -->
+    <div class="frame" id="detail">
+      <div class="wf-tag">WIREFRAME · 1440×900</div>
+      <div class="app">
+        <aside class="sidebar">
+          <div class="brand">Debrief</div>
+          <div class="side-item">Dashboard</div>
+          <div class="side-item active">Sessions</div>
+          <div class="side-item">New session</div>
+          <div class="side-item">Insights</div>
+          <div class="side-item">Settings</div>
+          <div class="side-foot"><span class="avatar">L</span>Lawson</div>
+        </aside>
+        <div class="main">
+          <div class="page-head">
+            <div>
+              <div class="muted" style="margin-bottom:6px;">← Back to Sessions</div>
+              <h1>Refactored auth middleware</h1>
+              <div class="meta">
+                <span class="pill">Coding</span>
+                <span>95 min</span>
+                <span>Mood 4 · Good</span>
+                <span>May 20, 2025</span>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;">
+              <button class="btn sm">Edit</button>
+              <button class="btn sm">Delete</button>
+            </div>
+          </div>
+          <div class="content">
+            <div class="grid-2">
+              <div class="card section">
+                <h3>Time</h3>
+                <div class="row"><div class="col">Started<br><strong>2:30 PM</strong></div><div class="col">Ended<br><strong>4:05 PM</strong></div></div>
+              </div>
+              <div class="card section">
+                <h3>Project</h3>
+                <span class="pill">debrief-api</span>
+              </div>
+              <div class="card section">
+                <h3>Reason</h3>
+                <span class="pill">Focused</span><span class="pill">Flow</span>
+              </div>
+              <div class="card section">
+                <h3>Focus / streak</h3>
+                <div>Focus quality: <strong>High</strong></div>
+                <div style="margin-top:6px;">Count toward streak: <strong>Yes</strong></div>
+              </div>
+            </div>
+            <div class="card section" style="margin-top:14px;">
+              <h3>Notes</h3>
+              <div class="note">Separated JWT validation from permission checks. Simplified the flow and added clearer error context. Tests passing — felt cleaner and easier to extend.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EMPTY -->
+    <div class="frame" id="empty">
+      <div class="wf-tag">WIREFRAME · 1440×900</div>
+      <div class="app">
+        <aside class="sidebar">
+          <div class="brand">Debrief</div>
+          <div class="side-item active">Dashboard</div>
+          <div class="side-item">Sessions</div>
+          <div class="side-item">New session</div>
+          <div class="side-item">Insights</div>
+          <div class="side-item">Settings</div>
+          <div class="side-foot"><span class="avatar">L</span>Lawson</div>
+        </aside>
+        <div class="main">
+          <div class="page-head">
+            <div>
+              <h1>Dashboard</h1>
+              <p>Overview of your sessions and progress</p>
+            </div>
+          </div>
+          <div class="content">
+            <div class="grid-4" style="margin-bottom:14px;">
+              <div class="card"><div class="label">Total hours</div><div class="metric">0</div></div>
+              <div class="card"><div class="label">Streak</div><div class="metric">0 days</div></div>
+              <div class="card"><div class="label">Avg mood</div><div class="metric">—</div></div>
+              <div class="card"><div class="label">Sessions</div><div class="metric">0</div></div>
+            </div>
+            <div class="empty">
+              <div style="width:48px;height:48px;border:1px solid #111;margin:0 auto;"></div>
+              <h2>No sessions yet</h2>
+              <p class="muted" style="max-width:360px;margin:0 auto 14px;">Log your first session to start tracking hours, mood, and streaks.</p>
+              <button class="btn solid">+ Log your first session</button>
+            </div>
+            <div class="card" style="margin-top:14px;">
+              <div class="label">Recent sessions</div>
+              <div class="ph" style="height:80px;">No sessions to display</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+<script>
+  const buttons = document.querySelectorAll('.toolbar button');
+  const frames = document.querySelectorAll('.frame');
+  function showPage(id) {
+    buttons.forEach(b => b.classList.toggle('active', b.dataset.page === id));
+    frames.forEach(f => f.classList.toggle('active', f.id === id));
+  }
+  buttons.forEach(btn => btn.addEventListener('click', () => showPage(btn.dataset.page)));
+  const params = new URLSearchParams(location.search);
+  const page = params.get('page') || 'landing';
+  showPage(page);
+  if (params.get('capture') === '1') {
+    document.querySelector('.toolbar').style.display = 'none';
+    document.querySelector('.stage').style.padding = '0';
+    document.body.style.background = '#fff';
+  }
+</script>
+</body>
+</html>
