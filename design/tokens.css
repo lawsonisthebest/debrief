@@ -1,23 +1,24 @@
+/* Debrief prototype — navy studio, one accent #2F80ED */
 :root {
   --bg: #0B1628;
-  --bg-sunken: #091322;
+  --sunken: #091322;
   --surface: #12203A;
-  --surface-2: #162744;
-  --surface-hover: #1A2E4E;
+  --s2: #162744;
+  --hover: #1A2E4E;
   --border: #243656;
-  --border-subtle: #1C2C48;
+  --subtle: #1C2C48;
   --text: #E7EDF6;
-  --text-secondary: #A7B4C8;
-  --text-muted: #7B8BA3;
-  --primary: #2F80ED;
-  --primary-dark: #1F6FD6;
-  --primary-soft: rgba(47, 128, 237, 0.14);
+  --sec: #A7B4C8;
+  --muted: #7B8BA3;
+  --p: #2F80ED;
+  --pd: #1F6FD6;
+  --ps: rgba(47, 128, 237, 0.14);
   --danger: #C85A5A;
-  --success: #3BA88C;
-  --cat-coding: #2F80ED;
-  --cat-cyber: #5B8FA8;
-  --cat-school: #6A9EC7;
-  --cat-other: #7B8BA3;
+  --ok: #3BA88C;
+  --cc: #2F80ED;
+  --cy: #5B8FA8;
+  --sc: #6A9EC7;
+  --ot: #7B8BA3;
   --radius-sm: 10px;
   --radius-md: 16px;
   --radius-lg: 20px;
